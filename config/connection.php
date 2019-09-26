@@ -1,0 +1,11 @@
+<?php
+
+
+echo "Versão".phpversion();
+
+
+
+
+
+
+?>
