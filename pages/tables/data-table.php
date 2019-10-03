@@ -1,3 +1,14 @@
+<?php
+session_start();
+require_once '../../Class/Client.php';
+ $cliente = new Client();
+ $cliente->connection("clientsadm", "localhost","root", "");
+
+if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
+  header("Location:../../index.php");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,28 +18,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Client Administration</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="node_modules/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="node_modules/simple-line-icons/css/simple-line-icons.css">
-  <link rel="stylesheet" href="node_modules/flag-icon-css/css/flag-icon.min.css">
-  <link rel="stylesheet" href="node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
+  <link rel="stylesheet" href="../../node_modules/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../node_modules/simple-line-icons/css/simple-line-icons.css">
+  <link rel="stylesheet" href="../../node_modules/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
   <!-- endinject -->
   <!-- plugin css for this page -->
-  <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="node_modules/jquery-bar-rating/dist/themes/fontawesome-stars.css">
+  <link rel="stylesheet" href="../../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css" />
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/menu/menu.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/menu/menu.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="images/favicon.png" />
+  <link rel="shortcut icon" href="../../images/favicon.png" />
 </head>
+
 <body>
   <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
+    <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.html"><img src="images/logoTesoura.svg" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logoTesoura.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo" href="../../index.html"><img src="../../images/logoTesoura.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images/logoTesoura.svg" alt="logo"/></a>
       </div>
       <div class="menu navbar-menu-wrapper d-flex align-items-center">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -40,20 +51,38 @@
               <span class="btn">+ Cadastrar</span>
             </a>
             <div class="dropdown-menu navbar-dropdown dropdown-left" aria-labelledby="actionDropdown">
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="http://localhost/Clients-Administration/pages/samples/registerClient.php">
                 <i class="icon-user text-primary"></i>
                 Cliente
               </a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="../samples/registerAdmin.php">
                 <i class="icon-user-following text-warning"></i>
                 Administrador
               </a>
              
             </div>
           </li>
+
+           <li class="nav-item dropdown d-none d-lg-flex">
+            <a class="nav-link dropdown-toggle nav-btn" id="actionDropdown" href="#" data-toggle="dropdown">
+              <span class="btn">Opções</span>
+            </a>
+            <div class="dropdown-menu navbar-dropdown dropdown-left" aria-labelledby="actionDropdown">
+              <a class="dropdown-item" href="../../Class/logout.php">
+                <i class="icon-user text-primary"></i>
+                Logout
+              </a>
+              
+             
+            </div>
+          </li>
         </ul>
        
+         
+         
+         
+        </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="icon-menu"></span>
         </button>
@@ -62,7 +91,7 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <div class="row row-offcanvas row-offcanvas-right">
-        <!-- partial:partials/_settings-panel.html -->
+        <!-- partial:../../partials/_settings-panel.html -->
         <div class="theme-setting-wrapper">
           
           <div id="theme-settings" class="settings-panel">
@@ -233,39 +262,33 @@
           </div>
         </div>
         <!-- partial -->
-        <!-- partial:partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <!-- partial:../../partials/_sidebar.html -->
+          <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item nav-profile">
               <div class="nav-link">
                 <div class="profile-image">
-                  <img src="http://via.placeholder.com/100x100/f4f4f4/000000" alt="image"/>
+                  <img src="../../images/user.svg" alt="image"/>
                   <span class="online-status online"></span> <!--change class online to offline or busy as needed-->
                 </div>
                 <div class="profile-name">
                   <p class="name">
-                    Marina Michel
+                    <?php echo $_SESSION['name_user'];?>
                   </p>
                   <p class="designation">
-                    Super Admin
+                   Admin
                   </p>
                 </div>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="../../home.php">
                 <i class="icon-rocket menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
-             
+                <span class="menu-title">Home</span>
+               
               </a>
             </li>
            
-           
-          
-           
-           
-          
-            
            
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
@@ -276,61 +299,90 @@
               <div class="collapse" id="tables">
                 <ul class="nav flex-column sub-menu">
                   
-                  <li class="nav-item"> <a class="nav-link" href="pages/tables/data-table.html">Listar</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="#">Listar</a></li>
                  
                   
                 </ul>
               </div>
             </li>
            
-           
-           
-          
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                <i class="icon-bubbles menu-icon"></i>
-                <span class="menu-title">Área restrita</span>
-                
-              </a>
-              <div class="collapse" id="auth">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                 
-                 
-                </ul>
-              </div>
-            </li>
-              
           </ul>
         </nav>
         <!-- partial -->
         <div class="content-wrapper">
-         
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Clientes</h4>
+              <div class="row">
+                <div class="col-12">
+                  <div class="table-responsive">
+                    <table id="order-listing" class="table">
+                      <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Sexo</th>
+                            <th>Categoria</th>
+                            <th>Telefone</th>
+                           
+                        </tr>
+                      </thead>
+                      <?php  
+                     
+
+                       if($cliente->error == "")
+                       {
+                        $cliente->listClient();
+                       
+
+                      
+                       foreach ($cliente->listClient() as $key => $value): ?>
+                      <tbody>
+                        <tr>
+                            <td><?php echo $value['id'];?></td>
+                            <td><?php echo $value['nome'];?></td>
+                            <td><?php echo $value['email'];?></td>
+                            <td><?php echo $value['sexo'];?></td>
+                            <td><?php echo $value['categoria'];?></td>
+                            <td><?php echo $value['tel'];?></td>
+                           
+                            <td>
+                               <a class="btn btn-outline-primary"  href="../samples/editClient.php?id=<?=$value['id'];?>">Editar</a>
+                              
+                            </td>
+                            <td>
+                             <a class="btn btn-outline-danger" href="data-table.php?id=<?php echo $value['id'];?>">Excluir</a>
+                            </td>
+                        </tr>
+                        
+                      </tbody>
+                    
+                    <?php endforeach; 
+
+                            if(isset($_GET['id']))
+                            {
+
+                              $id = addslashes($_GET['id']);
+
+                              $cliente->deleteClient($id);
+
+                           }
+   
+                  }else{
+                    echo "erro". $cliente->error;
+                  }
+                    ?>
+                    </table>                    
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
          
-                   
-                   
-                 
-            
-          
-        
-           
-         
-                 
-               
-         
-         
-         
-                 
-                 
-                 
-           
-           
-          
-          
-           
-         
-         
+   
+        <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="container-fluid clearfix">
             <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2017 <a href="#">UrbanUI</a>. All rights reserved.</span>
@@ -344,29 +396,25 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
-
   <!-- plugins:js -->
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
-  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
+  <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="../../node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page-->
-  <script src="node_modules/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
-  <script src="node_modules/chart.js/dist/Chart.min.js"></script>
-  <script src="node_modules/raphael/raphael.min.js"></script>
-  <script src="node_modules/morris.js/morris.min.js"></script>
-  <script src="node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
+  <script src="../../node_modules/datatables.net/js/jquery.dataTables.js"></script>
+  <script src="../../node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
   <!-- End plugin js for this page-->
   <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/hoverable-collapse.js"></script>
-  <script src="js/misc.js"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/todolist.js"></script>
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/misc.js"></script>
+  <script src="../../js/settings.js"></script>
+  <script src="../../js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src="js/dashboard.js"></script>
+  <script src="../../js/data-table.js"></script>
   <!-- End custom js for this page-->
 </body>
 

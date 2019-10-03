@@ -1,0 +1,41 @@
+body {
+	
+	overflow: hidden;
+}
+.form{
+	position: relative;
+	z-index: 9999;
+	overflow: hidden;
+}
+.squares li{
+	width: 40%;
+    height: 40%;
+    background: #327cab;
+	border-radius: 14% 14% 14%;
+	display: block;
+	position: absolute;
+	bottom: -40px;
+	animation: up 2s infinite;
+	animation-direction: alternate;
+
+}
+
+@keyframes up {
+	from {
+		opacity: 0;
+		transform: translateY(0);
+		}
+		50%{
+			opacity: 1;
+		}
+		to{
+			transform: translateY(-800px) rotate(960deg);
+		}
+}
+
+
+.erro{
+	border-radius: 3% 3% 3%;
+	color: black;
+
+}
