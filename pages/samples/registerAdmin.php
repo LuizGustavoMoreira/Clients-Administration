@@ -1,13 +1,21 @@
+<!--ABRE TAG PHP-->
 <?php
+//INICIA UMA SESSION
 session_start();
+//INCLUI A CLASSE ADMIN
 require_once '../../Class/Admin.php';
-
+//CRIA UM OBJETO DE ADMIN
 $adm = new Admin();
-
-
+//PASSA OS PARAMETROS DE CONEXAO
+$adm->connection("clientsadm", "localhost", "root", "");
+//VERIFICA SE A SESSION DO USUARIO EXISTE
+if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])  ){
+  header("Location:../../index.php");
+  exit;
+}
 
 ?>
-
+<!--FECHA TAG PHP-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +35,7 @@ $adm = new Admin();
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
+   <link rel="stylesheet" href="../../css/menu/menu.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="../../images/favicon.png" />
 </head>
@@ -35,7 +44,7 @@ $adm = new Admin();
   <div class="container-scroller">
     <div class="container-fluid page-body-wrapper">
       <div class="row">
-        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth register-full-bg">
+        <div class=" menu content-wrapper full-page-wrapper d-flex align-items-center auth ">
           <div class="row w-100">
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left p-5">
@@ -55,22 +64,16 @@ $adm = new Admin();
                   <div class="form-group">
                     <label for="exampleInputPassword2">Senha</label>
                      <input class="form-control"   type="password" name="pass" placeholder="Senha">
-                     
+                      <br/>
+                      <input class="btn btn-block btn-dark btn-lg font-weight-medium" type="submit">
                   </div>
-
-                 
-
-                   
+ 
                   </div>
-                  <div class="mt-5">
-                    <input class="btn btn-block btn-primary btn-lg font-weight-medium" type="submit">
-                  </div>
-                  
-                
                 </form>
 
-
+                <!--ABRE TAG PHP-->
                  <?php
+                 //VERIFICAR SE FOI ENVIADO OS DADOS
                   if(isset($_POST['name']))
                   {
 
@@ -79,15 +82,16 @@ $adm = new Admin();
                     $pass = addslashes(md5($_POST['pass']));
                     
 
-
+                    //VERIFICAR SE OS CAMPOS ESTÃO VAZIOS
                     if(!empty($name) && !empty($email) && !empty($pass))
                     {
 
-                      $adm->connection("clientsadm", "localhost", "root", "");
-
+                      
+                      //VERIFICA A CONEXAO
                       if($adm->error == "")
                       {
                        
+                       //ACESSA O METODO REGISTER
                         if($adm->register($name, $email, $pass)){
                         
                           echo "<br/>";
@@ -110,7 +114,8 @@ $adm = new Admin();
 
 
                 ?>
-
+                <!--FECHA TAG PHP-->
+                
                
               </div>
             </div>

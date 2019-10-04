@@ -1,12 +1,14 @@
+<!--ABRE TAG PHP-->
 <?php
 
-
+//CLASSE ADMIN
 class Admin {
 
-	//ATRIBUITOS
+	//ATRIBUITOS DE CONEXAO
 	private $pdo;
 	public $error = "";
 
+//METODO PARA FAZER CONEXAO COM BANCO
 public function connection($name,$host,$user,$pass){
 		
 		global $pdo;
@@ -25,7 +27,7 @@ public function connection($name,$host,$user,$pass){
 
 	}
 
-
+//METODO DE REGISTRO DOS DADOS DO ADMIN
 public function register($name, $email, $pass){
 	global $pdo;
 	
@@ -51,10 +53,10 @@ public function register($name, $email, $pass){
 }
 
 
-
+//METODO DE LOGIN PARA O ADMIM
 public function login($email,$pass){
 		global $pdo;
-		$stmt = $pdo->prepare("SELECT id,name FROM admin WHERE email = :EMAIL AND pass = :SENHA");
+		$stmt = $pdo->prepare("SELECT * FROM admin WHERE email = :EMAIL AND pass = :SENHA");
 		$stmt->bindValue(":EMAIL", $email);
 		$stmt->bindValue(":SENHA", $pass);
 		
@@ -69,6 +71,9 @@ public function login($email,$pass){
 			session_start();
 			$_SESSION['id_user'] = $resul['id'];
 			$_SESSION['name_user'] = $resul['name'];
+			$_SESSION['email_user'] = $resul['email'];
+			$_SESSION['pass_user'] = $resul['pass'];
+
 			return true;
 			
 		}else{
@@ -79,13 +84,50 @@ public function login($email,$pass){
 
 	}
 
+//METODO BUSCAR INFORMAÇOES DO ADMIN
+public function findAdmin($id){
+		global $pdo;
+		
+	
+		$stmt = $pdo->prepare("SELECT * FROM admin WHERE id = :ID");
+		$stmt->bindValue(":ID",$id);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		return $result;
+
+		
+
+
+	}
+
+	//METODO EDITAR INFORMAÇÕES DO ADMIN
+	public function editAdmin($id,$name, $email,$pass){
+		global $pdo;
+
+		$stmt = $pdo->prepare("UPDATE admin SET name = :NAME, email = :EMAIL, pass = :PASS
+			 WHERE id = :ID");
+		
+		$stmt->bindValue(":ID",$id);
+		$stmt->bindValue(":NAME",$name);
+		$stmt->bindValue(":EMAIL",$email);
+		$stmt->bindValue(":PASS",$pass);
+		
+		
+
+
+		$stmt->execute();
+		return true;
+		
+
+
+	}
+	
+
 	
 
 
 }
 
 
-
-
-
 ?>
+<!--FECHA TAG PHP-->

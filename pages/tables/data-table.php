@@ -1,17 +1,25 @@
+<!--ABRE TAG PHP-->
 <?php
+//INICIA UMA SESSÃO
 session_start();
+//INCLUI A CLASSE CLIENTE
 require_once '../../Class/Client.php';
+//CRIA UM OBJETO DA CLASSE
  $cliente = new Client();
+ //PASSA OS PARAMETROS DE CONEXAO COM O BANCO
  $cliente->connection("clientsadm", "localhost","root", "");
 
+//VERIFICA SE JÁ EXISTE A SESSÃO DO USUARIO
 if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
   header("Location:../../index.php");
   exit;
 }
+
 ?>
+<!--FECHA TAG PHP-->
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -73,15 +81,9 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                 <i class="icon-user text-primary"></i>
                 Logout
               </a>
-              
-             
             </div>
           </li>
         </ul>
-       
-         
-         
-         
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="icon-menu"></span>
@@ -288,8 +290,6 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                
               </a>
             </li>
-           
-           
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                 <i class="icon-grid menu-icon"></i>
@@ -300,8 +300,6 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                 <ul class="nav flex-column sub-menu">
                   
                   <li class="nav-item"> <a class="nav-link" href="#">Listar</a></li>
-                 
-                  
                 </ul>
               </div>
             </li>
@@ -309,7 +307,7 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
           </ul>
         </nav>
         <!-- partial -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-dark">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Clientes</h4>
@@ -319,59 +317,70 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                     <table id="order-listing" class="table">
                       <thead>
                         <tr>
-                            <th>ID</th>
+                            <th >ID</th>
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Sexo</th>
                             <th>Categoria</th>
                             <th>Telefone</th>
+                            <th>Agendado para</th>
                            
                         </tr>
                       </thead>
-                      <?php  
-                     
-
-                       if($cliente->error == "")
-                       {
-                        $cliente->listClient();
-                       
-
-                      
-                       foreach ($cliente->listClient() as $key => $value): ?>
+                    <!--ABRE TAG PHP-->
+                    <?php  
+                    //VERIFICA SE HÁ UM ERRO NA CONEXAO
+                    if($cliente->error == "")
+                    {
+                      //ACESSA O METODO LISTAR CLIENTE
+                      $cliente->listClient();
+                      //PERCORRE A LISTA COM O FOREACH
+                      foreach ($cliente->listClient() as $key => $value): ?>
                       <tbody>
-                        <tr>
+                          <tr>
                             <td><?php echo $value['id'];?></td>
                             <td><?php echo $value['nome'];?></td>
                             <td><?php echo $value['email'];?></td>
                             <td><?php echo $value['sexo'];?></td>
                             <td><?php echo $value['categoria'];?></td>
                             <td><?php echo $value['tel'];?></td>
+                            <td class="max-w-100"><?php echo $value['data'];?></td>
                            
                             <td>
-                               <a class="btn btn-outline-primary"  href="../samples/editClient.php?id=<?=$value['id'];?>">Editar</a>
-                              
+                              <a class="btn btn-outline-primary"  href="../samples/editClient.php?id=<?=$value['id'];?>">Editar</a>   
                             </td>
                             <td>
-                             <a class="btn btn-outline-danger" href="data-table.php?id=<?php echo $value['id'];?>">Excluir</a>
+                              <a class="btn btn-outline-danger" href="data-table.php?id=<?php echo $value['id'];?>">Excluir</a>
                             </td>
-                        </tr>
+                          </tr>
                         
-                      </tbody>
-                    
-                    <?php endforeach; 
+                          </tbody>
+                        <!--FECHA O FOREACH-->
+                        <?php endforeach;
 
+                            //VERIFICA SE EXISTE O ID
                             if(isset($_GET['id']))
                             {
 
                               $id = addslashes($_GET['id']);
 
-                              $cliente->deleteClient($id);
+                              //ACESSA O METODO DE DELETAR CLIENTE
+                              if($cliente->deleteClient($id))
+                              {
+                                echo "<p class='bg-primary text-light text-center'><strong>deletado com sucesso</strong></p>";
+                                header("location:data-table.php");
+
+                              }else{
+                                echo "<p class='bg-warning text-light'><strong>Erro ao deletar!!!</strong></p>";
+                              }
 
                            }
    
                   }else{
                     echo "erro". $cliente->error;
                   }
+                    
+                    //FECHA TAG PHP
                     ?>
                     </table>                    
                   </div>
@@ -380,8 +389,6 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
             </div>
           </div>
         </div>
-         
-   
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="container-fluid clearfix">

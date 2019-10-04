@@ -2,6 +2,9 @@ body {
 	
 	overflow: hidden;
 }
+.back{
+	background: black;
+}
 .form{
 	position: relative;
 	z-index: 9999;
@@ -10,7 +13,7 @@ body {
 .squares li{
 	width: 40%;
     height: 40%;
-    background: #327cab;
+    background: linear-gradient(to right , #3939a2 , #0aa581);
 	border-radius: 14% 14% 14%;
 	display: block;
 	position: absolute;

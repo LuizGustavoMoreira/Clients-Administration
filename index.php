@@ -31,24 +31,24 @@ $adm = new Admin();
     <div class="container-fluid page-body-wrapper">
       <div class="row">
         <div class="bg-dark text-light content-wrapper full-page-wrapper  d-flex align-items-center  login-full-bg">
-          <div class="  row w-100">
+          <div class=" auth row w-100">
             <div class="col-lg-4 mx-auto">
-              <div class="form form-login auth-form-dark text-left p-5">
+              <div class="form form-login auth-form-dark text-light text-left p-5">
                 <h2 class="text-center">Login</h2>
               
                 <form method="POST"  class="pt-5">
                   <div class="form-group">
                     
-                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Email">
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Email" required>
                    
                   </div>
                   <div class="form-group">
                    
-                    <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Senha">
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Senha" required>
                     
                   </div>
                   <div class="mt-5">
-                    <input class="btn btn-block btn-primary btn-lg font-weight-medium" type="submit">
+                    <input class="btn btn-block btn-primary  btn-lg font-weight-medium"  type="submit">
                   </div>
                                    
                 </form>
@@ -76,15 +76,6 @@ $adm = new Admin();
                     <?php
                   }
 
-
-                 }else{
-                  ?>
-                    <div>
-                      <br/>
-                        <p class="erro bg-danger  text-center"><strong>Preencha todos os campos</strong></p>
-                    </div>
-                    
-                    <?php
 
                  }
                  

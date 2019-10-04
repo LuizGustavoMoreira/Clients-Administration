@@ -1,14 +1,20 @@
+<!--ABRE TAG PHP-->
 <?php
+//INICIA UMA SESSION
 session_start();
+//INCLUI CLASSE CLIENT
 require_once '../../Class/Client.php';
-
+//CRIA UM OBJETO DA CLASSE
 $cliente = new Client();
-
+//PASSA OS PARAMETROS DE CONEXAO
+ $cliente->connection("clientsadm","localhost", "root", "");
+//VERIFICA SE EXISTE A SESSION DO USUARIO
 if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
   header("Location:../../index.php");
   exit;
 }
 ?>
+<!--FECHA TAG PHP-->
 
 
 <!DOCTYPE html>
@@ -29,21 +35,22 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/menu/menu.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="../../images/favicon.png" />
 </head>
 
 <body>
-  <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper">
+  <div class="container-scroller ">
+    <div class="container-fluid page-body-wrapper ">
       <div class="row">
-        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth register-full-bg">
+        <div class="menu content-wrapper full-page-wrapper d-flex align-items-center auth ">
           <div class="row w-100">
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left p-5">
                 <h2>Cadastro de clientes</h2>
                
-                <form method="POST"  class="pt-4">
+                <form method="POST" enctype="multipart/form-data" class="pt-4">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Nome</label>
                     <input type="text" name="name" class="form-control"  placeholder="Nome">
@@ -57,59 +64,55 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                   <div class="form-group">
                     <label for="exampleInputPassword2">Sexo</label>
                      <input class="form-control"   type="text" name="sexo">
-                     <!--
-                      <datalist>
-                        <option value="masculino" >Masculino</option>
-                        <option value="feminino" >Feminino</option>
-                      </datalist> -->
-                   
+
                   </div>
 
                    <div class="form-group">
                     <label for="exampleInputPassword2">Categoria</label>
-                     <input class="form-control"  type="text" name="category">
-                     <!-- <datalist id="categoria">
-                        <option value="corte"></option>
-                        <option value="escova" ></option>
-                        <option value="alisamento" ></option>
-                        <option value="luzes" ></option>
-                        <option value="hidratacao" ></option>
-
-                      </datalist> -->
-                   
+                     <input class="form-control"  type="text" name="category">                   
+                  </div>
+                   <div class="form-group">
+                    <label for="exampleInputPassword2">Data</label>
+                     <input class="form-control"   type="date" name="date" placeholder="">
+                     
                   </div>
 
                    <div class="form-group">
                     <label for="exampleInputEmail1">Celular</label>
                     <input type="number" name="phone" class="form-control" id="exampleInputEmail1" placeholder="Celular">
                     
+                    </div>
+                  <div class="form-group">
+                      <input class="btn btn-block btn-dark btn-lg font-weight-medium" type="submit">
                   </div>
-                  <div class="mt-5">
-                    <input class="btn btn-block btn-primary btn-lg font-weight-medium" type="submit">
+
+
                   </div>
+                 
                   
                 
                 </form>
 
+                <!--ABRE TAG PHP-->
                  <?php
+                    //VERIFICA SE FOI ENVIADO AS INFO
                     if(isset($_POST['name']))
                     {
                     $name = addslashes($_POST['name']);
                     $email = addslashes($_POST['email']);
                     $sexo = addslashes($_POST['sexo']);
                     $category = addslashes($_POST['category']);
+                    $date = addslashes($_POST['date']);
                     $phone = addslashes($_POST['phone']);
                   
-
-                    if(!empty($name) && !empty($email) && !empty($sexo) && !empty($category) && !empty($phone))
+                    //VERIFICA SE OS CAMPOS ESTÃO VAZIOS
+                    if(!empty($name) && !empty($email) && !empty($sexo) && !empty($category) && !empty($phone) && !empty($date))
                       {
-
-                        $cliente->connection("clientsadm","localhost", "root", "");
-
+                        //VERIFICA A CONEXAO
                         if($cliente->error == "")
                         { 
-
-                          if($cliente->register($name,$email,$sexo, $category,$phone))
+                          //ACESSA O METODO REGISTER
+                          if($cliente->register($name,$email,$sexo, $category,$phone,$date))
                           {
                             echo "<br/>";
                           echo "<p class='bg-primary text-light text-center'>Cadastrado com sucesso";
@@ -133,32 +136,13 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
 
                           echo "<br/>";
                           echo "<p class='bg-danger text-dark text-center'>Preencha todos os campos";
-
-                       
-                       
-
-
                       }
 
                   }
                      
 
-                   
-                    
-
-                 
-
-                  
-                 
-                   
-                    
-                  
-                
-
-
                 ?>
 
-               
               </div>
             </div>
           </div>
@@ -171,6 +155,7 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
+  <script src="js/date.js"></script>
   <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

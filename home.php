@@ -1,20 +1,22 @@
+<!--ABRE TAG PHP-->
 <?php
+//INICIA UMA SESSION
 session_start();
-require_once 'Class/Client.php';
-$cliente = new Client();
-
-
+//INCLUI CLASSE ADMIN
+require_once 'Class/Admin.php';
+//CRIA UM OJETO DA CLASSE
+$adm = new Admin(); 
+//PASSA OS PARAMETROS DE CONEXAO
+$adm->connection("clientsadm", "localhost","root", "");
+//VERIFICA SE EXISTE A SESSION DO USUARIO
 if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
-  header("Location:index.php");
-  exit;
+  header("location:index.php");
+  exit();
 }
-
-
 ?>
-
+<!--FECHA TAG PHP-->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -76,8 +78,6 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
                 <i class="icon-user text-primary"></i>
                 Logout
               </a>
-              
-             
             </div>
           </li>
         </ul>
@@ -287,8 +287,6 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
              
               </a>
             </li>
-           
-           
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                 <i class="icon-grid menu-icon"></i>
@@ -298,9 +296,7 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
               <div class="collapse" id="tables">
                 <ul class="nav flex-column sub-menu">
                   
-                  <li class="nav-item"> <a class="nav-link" href="pages/tables/data-table.php">Listar</a></li>
-                 
-                  
+                  <li class="nav-item"> <a class="nav-link" href="pages/tables/data-table.php">Listar</a></li>    
                 </ul>
               </div>
             </li>
@@ -308,12 +304,106 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
           </ul>
         </nav>
         <!-- partial -->
-        <div class="content-wrapper bg-dark">
-          <h1 class="text-light ">Bem vindo(a) <?php echo $_SESSION['name_user'];?></h1>
+        <div class="content-wrapper bg-dark ">
+          <h1 class="text-light ">Olá ,  <?php echo $_SESSION['name_user'];?></h1>
+
+          <div class="row align-items-center ">
+            <div class="col-lg-12">
+              <div class="card w-50 my-4">
+                <div  class="card-body  bg-light text-dark ">
+                  <h2 class="card-title text-center text-dark">Editar informações</h2>
+                  <form class="cmxform" id="signupForm" method="POST" >
+                    <fieldset>
+                      <div class="form-group">
+                        <label for="firstname">Nome</label>
+                        <input style="border-color: #8c8c8c;border-radius: 14px;" id="firstname" class="form-control"  name="name" type="text" value="<?=$_SESSION['name_user'];?>">
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="email">Email</label>
+                        <input style="border-color: #8c8c8c;border-radius: 14px;" id="email" class="form-control" name="email" type="email"  value="<?=$_SESSION['email_user'];?> " >
+                      </div>
+
+                      <div class="form-group">
+                        <label for="username">Senha</label>
+                        <input style="border-color: #8c8c8c;border-radius: 14px;" id="pass" class="form-control " name="pass" type="password" >
+
+                      </div>
+                      <input class="btn btn-dark align-self-center mx-auto" type="submit" value="Salvar">
+                    </fieldset>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--ABRE TAG PHP-->
+          <?php
+          //VERIFICA SE A SESSION ESTÁ VAZIA OU NÃO
+          if($_SESSION['id_user'] != "")
+          {
+            $id = $_SESSION['id_user'];
+          }
+          //PEGA OS RESULTADOS DE BUSCA
+          $result = $adm->findAdmin($id);
+          //VERIFICA SE FOI ENVIADO
+          if(isset($_POST['name'])){
+
+            $name = addslashes($_POST['name']);
+            $email = addslashes($_POST['email']);
+            $pass = addslashes($_POST['pass']);
+            
+            //JOGA O VALOR DA SESSION NA SENHA ATUAL
+            $password = $_SESSION['pass_user'];
+            //JOGA OS VALORES DIGITADOS PARA A SESSION
+            $_SESSION['name_user'] = $name;
+            $_SESSION['email_user'] = $email;
+            
+           
+            //VERIFICA SE A SENHA DIGITA É VAZIA
+            if($pass == "")
+            {
+              //ACESSA O METODO EDITAR INFO DO ADMIN
+              if($adm->editAdmin($id,$name,$email,md5($password)))
+              {
+                
+                echo "<br/>";
+                echo  "<p class=' bg-warning text-center font-weight-bold'><strong>Dados editados com sucesso!</strong></p>";
+                 header("location:home.php");
+              }else{
+              echo "Erro";
+              }
+            }//VERIFICA SE A SENHA DIGITA É DIFERENTE DA ATUAL E SE OS CAMPOS
+            //NOME E EMAIL SÃO DIFEENTES DE VAZIO
+            else if($pass != $password || $name != "" || $email != "")
+            {  
+              //JOGA O VALOR DA SENHA DIGITA PARA A SESSION
+              $_SESSION['pass_user'] = $pass;
+              //PASSA OS VALORES DA SESSION PARA OS CAMPOS DIGITADOS
+             $name = $_SESSION['name_user'];
+             $email = $_SESSION['email_user'];
+
+             //ACESSA O METODO EDITAR
+             if($adm->editAdmin($id,$name,$email,md5($pass)))
+              {
+                echo "<br/>";
+                echo  "<p class=' bg-warning text-center font-weight-bold'><strong>Dados editados com sucesso!</strong></p>";
+                header("location:home.php");
+              }else{
+              echo "Erro";
+              }
+              //VERIFICA SE A SENHA ATUAL É IGUAL A SENHA DIGITADA
+            }else if($pass == $password)
+            {
+              echo "<br/>";
+                echo  "<p class=' bg-danger text-center font-weight-bold'><strong>Você já possui esta senha</strong></p>";
+            }
+          }
+          ?>
+          <!--FECHA TAG PHP-->
           </div>
   
-        <footer class="footer">
-          <div class="container-fluid clearfix">
+        <footer class="footer ">
+          <div class="container-fluid">
             <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2017 <a href="#">UrbanUI</a>. All rights reserved.</span>
            
           </div>
@@ -327,6 +417,7 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
   <!-- container-scroller -->
 
   <!-- plugins:js -->
+  <script src="js/editInfo/index.js"></script>
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
   <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -352,3 +443,4 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
 </body>
 
 </html>
+?>
