@@ -30,7 +30,7 @@ $adm = new Admin();
   <div class="container-scroller">
     <div class="container-fluid page-body-wrapper">
       <div class="row">
-        <div class="bg-dark text-light content-wrapper full-page-wrapper  d-flex align-items-center  login-full-bg">
+        <div style="background-image: url('images/bg.jpg'); " class=" text-light content-wrapper full-page-wrapper  d-flex align-items-center  login-full-bg">
           <div class=" auth row w-100">
             <div class="col-lg-4 mx-auto">
               <div class="form form-login auth-form-dark text-light text-left p-5">

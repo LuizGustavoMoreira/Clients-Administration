@@ -365,10 +365,9 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
               //ACESSA O METODO EDITAR INFO DO ADMIN
               if($adm->editAdmin($id,$name,$email,md5($password)))
               {
-                
-                echo "<br/>";
+                 echo "<script>location.href = 'home.php'</script>";
+                  echo "<br/>";
                 echo  "<p class=' bg-warning text-center font-weight-bold'><strong>Dados editados com sucesso!</strong></p>";
-                 header("location:home.php");
               }else{
               echo "Erro";
               }
@@ -385,9 +384,10 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user']) ){
              //ACESSA O METODO EDITAR
              if($adm->editAdmin($id,$name,$email,md5($pass)))
               {
+                 echo "<script>location.href = 'home.php'</script>";
                 echo "<br/>";
                 echo  "<p class=' bg-warning text-center font-weight-bold'><strong>Dados editados com sucesso!</strong></p>";
-                header("location:home.php");
+               
               }else{
               echo "Erro";
               }

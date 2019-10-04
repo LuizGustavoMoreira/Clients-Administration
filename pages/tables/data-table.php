@@ -368,7 +368,7 @@ if(!isset($_SESSION['id_user']) && !isset($_SESSION['name_user'])){
                               if($cliente->deleteClient($id))
                               {
                                 echo "<p class='bg-primary text-light text-center'><strong>deletado com sucesso</strong></p>";
-                                header("location:data-table.php");
+                               echo "<script>location.href = 'data-table.php'</script>";
 
                               }else{
                                 echo "<p class='bg-warning text-light'><strong>Erro ao deletar!!!</strong></p>";
